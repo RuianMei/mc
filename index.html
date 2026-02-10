@@ -2,34 +2,118 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>访问受限</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>受保护的彩色网页</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f9; }
-        .box { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
-        input { padding: 10px; width: 200px; border: 1px solid #ddd; border-radius: 4px; outline: none; }
-        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; }
-        button:hover { background: #0056b3; }
+        /* 基础样式：全屏渐变动画 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 登录框样式 */
+        #login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 10;
+        }
+
+        input {
+            padding: 10px;
+            width: 200px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #e73c7e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #ee7752; }
+
+        /* 隐藏的内容区域 */
+        #protected-content {
+            display: none;
+            color: white;
+            text-align: center;
+        }
+
+        .rainbow-text {
+            font-size: 3rem;
+            font-weight: bold;
+            background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rainbow 5s linear infinite;
+        }
+
+        @keyframes rainbow {
+            to { background-position: 200% center; }
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h3>请输入访问密码</h3>
-        <input type="password" id="password" placeholder="输入密码后按回车">
-        <button onclick="check()">确定</button>
+
+    <!-- 登录界面 -->
+    <div id="login-container">
+        <h2>🔒 私人页面</h2>
+        <p>请输入密码以解锁彩色世界</p>
+        <input type="password" id="passwordInput" placeholder="输入密码...">
+        <br>
+        <button onclick="checkPassword()">解锁</button>
+    </div>
+
+    <!-- 验证成功后显示的内容 -->
+    <div id="protected-content">
+        <h1 class="rainbow-text">欢迎来到彩色世界！</h1>
+        <p style="font-size: 1.2rem;">恭喜你，密码正确。这是一个充满动感的彩色网页。</p>
     </div>
 
     <script>
-        function check() {
-            const pw = document.getElementById('password').value;
-            // 请在此处修改你的密码，目前设置为 "123"
-            if (pw === '123') { 
-                window.location.href = "https://ruianmei.github.io/cjcj-asdfghjklqwertyuiopmnbvcxz/";
+        function checkPassword() {
+            const pass = document.getElementById('passwordInput').value;
+            // 此处设置你的密码，例如: 123456
+            if (pass === "123456") {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('protected-content').style.display = 'block';
+                document.body.style.overflow = 'auto';
             } else {
                 alert("密码错误，请重试！");
             }
         }
-        // 支持回车键提交
-        document.getElementById('password').onkeydown = e => { if(e.key === 'Enter') check(); };
+
+        // 支持回车提交
+        document.getElementById("passwordInput").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        });
     </script>
 </body>
 </html>
